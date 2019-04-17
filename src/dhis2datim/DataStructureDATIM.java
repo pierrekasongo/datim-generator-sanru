@@ -85,6 +85,8 @@ public class DataStructureDATIM {
             
             if(age.startsWith("+"))
                 age=age.replace('+', ' ').trim()+"+";
+            if(age.startsWith(">"))
+                age=age.replace('>', ' ').trim()+"+";
             return age;
         }
         return tranche;      

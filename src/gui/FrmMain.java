@@ -266,14 +266,14 @@ public class FrmMain extends javax.swing.JFrame {
 
         list = new ArrayList<>();
 
-        System.out.println("Data element,Period,OrganisationUnit,CategorieCombo,AttributeCombo,Value");
+        System.out.println("Data element,Period,OrganisationUnit,CategorieCombo,CategorieComboUID, AttributeCombo,Value");
 
         //*************************
         //REMEMBER YOU DIDN'T TAKE INTO ACCOUNT THE TOTAL COLUMNS FOR HTS_TST (MUST BE DELETED OR CHANGE CODE
         //*************************
         for (CategoryComboType type : CategoryComboType.values()) {
             
-            if (type.toString().equals("HTS_TST") || type.toString().equals("HTS_TST_2")
+            /*if (type.toString().equals("HTS_TST") || type.toString().equals("HTS_TST_2")
                     || type.toString().equals("PMTCT_STAT")
                     || type.toString().equals("TB_STAT") || type.toString().equals("HTS_INDEX")
                     || type.toString().equals("TX_NEW") || type.toString().equals("PMTCT_HEI_POS")
@@ -291,17 +291,19 @@ public class FrmMain extends javax.swing.JFrame {
                 lstData = processor.processPreprocessed(ind);
 
                 fillList(lstData, ind);
-            }
+            }*/
             if(PERIODICITY.equals("SEMI_ANNUAL") || PERIODICITY.equals("ANNUAL")){
                 
-                if (type.toString().equals("PP_PREV") || type.toString().equals("TB_PREV")
-                        || type.toString().equals("TX_TB")|| type.toString().equals("TX_ML")) {
+                if (type.toString().equals("PP_PREV") /*|| type.toString().equals("TB_PREV")*/
+                        || type.toString().equals("TX_TB") || type.toString().equals("TX_ML")) {
 
                     processor = new Processor(type);
 
                     Indicateur ind = new Indicateur(type.toString());
 
                     lstData = processor.processPreprocessed(ind);
+                    
+                    
 
                     fillList(lstData, ind);
                 }
@@ -550,6 +552,72 @@ public class FrmMain extends javax.swing.JFrame {
                 } else {
                     categorieCombo = ds.getTranche() + ", " + ds.getGenre() + ", " + ds.getStatut() + ", Positive";
                 }
+            }else if(ind.getNom().equals("PP_PREV")){
+                
+                //System.out.println(ds.getFosa());
+                if(ds.getGenre().contains("Unknown")){
+                    
+                    if(ds.getTranche().length() == 0){
+                        
+                        categorieCombo="Newly Tested or Testing Referred";
+                    }else{
+                        
+                        if(ds.getTranche().toLowerCase().contains("military")){
+                            categorieCombo="Military & Other Uniformed Services";
+                        }else if(ds.getTranche().toLowerCase().contains("mobile")){
+
+                            categorieCombo="Mobile Population";
+                        }else if(ds.getTranche().toLowerCase().contains("client")){
+
+                            categorieCombo="Clients of Sex Workers";
+                        }else if(ds.getTranche().toLowerCase().contains("deplaced")){
+
+                            categorieCombo="Displaced Persons";
+                        }else if(ds.getTranche().toLowerCase().contains("pecheur")){
+                            categorieCombo="Fishing Communities";
+                        }else if(ds.getTranche().toLowerCase().contains("udi")){
+                            categorieCombo="Non-injecting Drug Users";
+                        }else if(ds.getTranche().toLowerCase().contains("others")){
+                            categorieCombo="Other Priority Population Types";
+                        } 
+                    }
+                    
+                }else{
+                    
+                    categorieCombo=ds.getTranche()+", "+ds.getGenre();
+                }
+            }else if(ind.getNom().equals("TX_ML")){
+                
+               if(dataelement.toLowerCase().contains("ml_d")){
+                   categorieCombo="No Clinical Contact - Patient Died, "+ds.getGenre()+", "+ds.getTranche();
+               }else if(dataelement.toLowerCase().contains("ml_t")){
+                   categorieCombo="No Clinical Contact - Undocumented Patient Transfer, "+ds.getGenre()+", "+ds.getTranche();
+               }else if(dataelement.toLowerCase().contains("non retrouv")){
+                   categorieCombo="No Clinical Contact - Unable to Locate Patient, "+ds.getGenre()+", "+ds.getTranche();
+               }else if(dataelement.toLowerCase().contains("non recherh")){
+                   categorieCombo="No Clinical Contact - No Attempt to Locate Patient, "+ds.getGenre()+", "+ds.getTranche();
+               }
+            }else if(ind.getNom().equals("TX_TB")){
+                
+                if(ds.getGenre().equals("Unknown Sex")){
+                    
+                    categorieCombo=ds.getTranche();
+                    
+                }else{
+                    if(dataelement.contains("TB_Nouveaux cas sous ARV - PVVIH TB positifs so")){
+                        categorieCombo=ds.getTranche()+", "+ds.getGenre()+", "+"Life-long ART, New, Positive";
+                    }else if(dataelement.contains("TB_Anciens cas sous ARV - PVVIH TB positifs so")){
+                         categorieCombo=ds.getTranche()+", "+ds.getGenre()+", "+"Life-long ART, Already, Positive";
+                    }else if(dataelement.equals("TB_Nouveaux cas sous ARV avec un screening TB positif")){
+                         categorieCombo=ds.getTranche()+", "+ds.getGenre()+", "+"Life-long ART, New, Positive";
+                    }else if(dataelement.equals("TB_Anciens cas sous ARV avec un screening TB positif")){
+                         categorieCombo=ds.getTranche()+", "+ds.getGenre()+", "+"Life-long ART, Already, Positive";
+                    }else if(dataelement.contains("TB_Nouveaux cas sous ARV avec un screening TB N")){
+                         categorieCombo=ds.getTranche()+", "+ds.getGenre()+", "+"Life-long ART, New, Positive";
+                    }else if(dataelement.contains("TB_Anciens cas sous ARV avec un screening TB N")){
+                         categorieCombo=ds.getTranche()+", "+ds.getGenre()+", "+"Life-long ART, New, Positive";
+                    }
+                }
             }
             //Deal with HTS and HTS_TST sub-group
             if (ind.getNom().equals("HTS_TST") || ind.getNom().equals("HTS_TST_2")) {
@@ -565,7 +633,6 @@ public class FrmMain extends javax.swing.JFrame {
             }
             categorieComboUID = processor.getCategorieComboByKey(categorieCombo);
 
-            //System.out.println(categorieCombo+" , "+categorieComboUID);
             System.out.println(count + " " + dataelement + "," + dataelementUID + "," + PERIOD + "," + ds.getFosa() + "," + fosaUID + ","
                     + categorieCombo + "," + categorieComboUID + "," + ATTRIBUTE_COMBO + "," + ds.getValeur());
 

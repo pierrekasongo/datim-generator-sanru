@@ -104,4 +104,7 @@ public class Constant {
     public static final String CATEGORIECOMBO_EMR_SITE_TAB_ID="CC_EMR_SITE";
     public static final String DATAELEMENT_EMR_SITE_ID="DE_EMR_SITE";
     
+    public static final String CATEGORIECOMBO_TX_ML_TAB_ID="CC_TX_ML";
+    public static final String DATAELEMENT_TX_ML_ID="DE_TX_ML";
+    
 }

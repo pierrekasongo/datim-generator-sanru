@@ -582,15 +582,62 @@ public class Processor {
                             }
                             
                         }
-                    }
+                }
                 case "PP_PREV":
+                    for(int i =4;i< countRows;i++){//Parcourir toutes les fosa
+                        try{
+             
+                            
+                             if(sheet.getCell(0,i).getContents().equals("Total"))break;
+                                
+                             fosa=sheet.getCell(0,i).getContents().split("/")[2].trim();
+                            
+                            if("".equals(fosa)) break;
+                            
+                            
+                        }catch(Exception e){
+                            
+                        }
+                                             
+                        for(int j=1;j < countColumns;j++){//Parcourir les colonnes pour chaque fosa
+                            
+                            String valeur="0";
+                            
+                            if(sheet.getCell(j,3).getContents().length() > 0){
+                                    tranche_age=sheet.getCell(j,3).getContents();
+                            }else{ 
+                                tranche_age="";
+                                genre="";
+                            }
+                            
+                            if(sheet.getCell(j,1).getContents().length() > 0)
+                                porteEntree=sheet.getCell(j,1).getContents();
+                                
+                            if(sheet.getCell(j,2).getContents().length() > 0)
+                                genre=sheet.getCell(j,2).getContents();
+                                
+                            if(sheet.getCell(j,i).getContents().length() > 0)
+                                valeur=tryParseInt(sheet.getCell(j,i).getContents()).toString();
+                               
+                            DataStructureDATIM struct=new DataStructureDATIM(fosa, porteEntree,
+                                tranche_age, genre, valeur, numerateur,status);
+                            //System.out.println(porteEntree+" "+genre+" "+tranche_age);
+                            
+                                
+                            lstData.add(struct);
+                            
+                        }
+                    }
+                break;
+                case "TX_ML":
+                    
                     for(int i =4;i< countRows;i++){//Parcourir toutes les fosa
                         
                         try{
                             
-                            if(sheet.getCell(0,i).getContents().contains("Total"))break;
+                            if(sheet.getCell(0,i).getContents().equals("Total"))break;
                             
-                            fosa=sheet.getCell(1,i).getContents().trim()+"/"+sheet.getCell(2,i).getContents().trim();
+                             fosa=sheet.getCell(0,i).getContents().split("/")[2].trim()+"/"+sheet.getCell(0,i).getContents().split("/")[3].trim();
                             
                         }catch(Exception e){
                             
@@ -598,23 +645,21 @@ public class Processor {
                         if(fosa.equals(""))continue;
                         
                       
-                        for(int j=3;j < countColumns;j++){//Parcourir les colonnes pour chaque fosa
+                        for(int j=1;j < countColumns;j++){//Parcourir les colonnes pour chaque fosa
                             
                             String valeur="0";
                             
-                            if(sheet.getCell(j,0).getContents().length() > 0)
-                                porteEntree=sheet.getCell(j,0).getContents();
-                            
                             if(sheet.getCell(j,3).getContents().length() > 0)
-                                genre=sheet.getCell(j,3).getContents();
+                                    tranche_age=sheet.getCell(j,3).getContents();
                             
-                            if(genre.length() > 0){
+                            if(tranche_age.length() > 0){
                                 
                                 if(sheet.getCell(j,1).getContents().length() > 0)
-                                    status=sheet.getCell(j,1).getContents();
+                                    porteEntree=sheet.getCell(j,1).getContents();
+                                if(porteEntree.toLowerCase().equals("total"))break;
                                 
                                 if(sheet.getCell(j,2).getContents().length() > 0)
-                                    tranche_age=sheet.getCell(j,2).getContents();
+                                    genre=sheet.getCell(j,2).getContents();
                                 
                                 
                                 if(sheet.getCell(j,i).getContents().length() > 0)
@@ -624,14 +669,60 @@ public class Processor {
                                         tranche_age, genre, valeur, numerateur,status);
                                 
                                 lstData.add(struct);
-                            }
+                            }  
+                        }
+                }
+                break;
+                case "TX_TB":
+                    
+                    for(int i =4;i< countRows;i++){//Parcourir toutes les fosa
+                        
+                        try{
+                            
+                            if(sheet.getCell(0,i).getContents().equals("Total"))break;
+                            
+                            fosa=sheet.getCell(0,i).getContents().split("/")[2].trim()+"/"+sheet.getCell(0,i).getContents().split("/")[3].trim();
+                            
+                        }catch(Exception e){
                             
                         }
+                        if(fosa.equals(""))continue;
+                        
+                      
+                        for(int j=1;j < countColumns;j++){//Parcourir les colonnes pour chaque fosa
+                            
+                            String valeur="0";
+                            
+                            if(sheet.getCell(j,3).getContents().length() > 0)
+                                    tranche_age=sheet.getCell(j,3).getContents();
+                            else tranche_age="";
+                            
+                            if(tranche_age.length() > 0){
+                                
+                                if(sheet.getCell(j,1).getContents().length() > 0)
+                                    porteEntree=sheet.getCell(j,1).getContents();
+                                if(porteEntree.toLowerCase().equals("total"))break;
+                                
+                                if(sheet.getCell(j,2).getContents().length() > 0)
+                                    genre=sheet.getCell(j,2).getContents();
+                                
+                                
+                                if(sheet.getCell(j,i).getContents().length() > 0)
+                                    valeur=tryParseInt(sheet.getCell(j,i).getContents()).toString();
+                               
+                                DataStructureDATIM struct=new DataStructureDATIM(fosa, porteEntree,
+                                        tranche_age, genre, valeur, numerateur,status);
+                                
+                                lstData.add(struct);
+                            }else{
+                                genre="";
+                            }  
+                        }
                     }
+                     break;
                 
                 default:
                         break;
-                
             }
               
         }catch(Exception e){
@@ -764,6 +855,9 @@ public class Processor {
                     break;
                 case EMR_SITE:
                     sheetID=Constant.CATEGORIECOMBO_EMR_SITE_TAB_ID;
+                    break;
+                case TX_ML:
+                     sheetID=Constant.CATEGORIECOMBO_TX_ML_TAB_ID;
                     break;
                 default:
                     break;
@@ -904,6 +998,9 @@ public class Processor {
                             break;
                         case EMR_SITE:
                             sheetID=Constant.DATAELEMENT_EMR_SITE_ID;
+                            break;
+                        case TX_ML:
+                            sheetID=Constant.DATAELEMENT_TX_ML_ID;
                             break;
                         default:
                             break;
