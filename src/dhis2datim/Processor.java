@@ -720,6 +720,54 @@ public class Processor {
                         }
                     }
                      break;
+                     
+                    case "TB_PREV":
+                    
+                    for(int i =4;i< countRows;i++){//Parcourir toutes les fosa
+                        
+                        try{
+                            
+                            if(sheet.getCell(0,i).getContents().equals("Total"))break;
+                            
+                            fosa=sheet.getCell(0,i).getContents().split("/")[2].trim()+"/"+sheet.getCell(0,i).getContents().split("/")[3].trim();
+                            
+                        }catch(Exception e){
+                            
+                        }
+                        if(fosa.equals(""))continue;
+                        
+                      
+                        for(int j=1;j < countColumns;j++){//Parcourir les colonnes pour chaque fosa
+                            
+                            String valeur="0";
+                            
+                            if(sheet.getCell(j,3).getContents().length() > 0)
+                                    tranche_age=sheet.getCell(j,3).getContents();
+                            else tranche_age="";
+                            
+                            if(tranche_age.length() > 0){
+                                
+                                if(sheet.getCell(j,1).getContents().length() > 0)
+                                    porteEntree=sheet.getCell(j,1).getContents();
+                                if(porteEntree.toLowerCase().equals("total"))break;
+                                
+                                if(sheet.getCell(j,2).getContents().length() > 0)
+                                    genre=sheet.getCell(j,2).getContents();
+                                
+                                
+                                if(sheet.getCell(j,i).getContents().length() > 0)
+                                    valeur=tryParseInt(sheet.getCell(j,i).getContents()).toString();
+                               
+                                DataStructureDATIM struct=new DataStructureDATIM(fosa, porteEntree,
+                                        tranche_age, genre, valeur, numerateur,status);
+                                
+                                lstData.add(struct);
+                            }else{
+                                genre="";
+                            }  
+                        }
+                    }
+                     break;
                 
                 default:
                         break;
@@ -909,7 +957,7 @@ public class Processor {
     public String getCategorieComboByKey(String key){
         
         String result="";
-
+         
 //        if(type.equals(CategoryComboType.HTS)){
             
             if(categorieCombo.containsKey(key))  
@@ -1029,8 +1077,7 @@ public class Processor {
     public String getDataElementByKey(String _key,Indicateur ind){
  
         String key=replaceWithKey(_key,ind);
-       
-
+        
         if(dataelement.containsKey(key))  
             return this.dataelement.get(key).toString();
         return "";

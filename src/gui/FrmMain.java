@@ -273,7 +273,7 @@ public class FrmMain extends javax.swing.JFrame {
         //*************************
         for (CategoryComboType type : CategoryComboType.values()) {
             
-            /*if (type.toString().equals("HTS_TST") || type.toString().equals("HTS_TST_2")
+            if (type.toString().equals("HTS_TST") || type.toString().equals("HTS_TST_2")
                     || type.toString().equals("PMTCT_STAT")
                     || type.toString().equals("TB_STAT") || type.toString().equals("HTS_INDEX")
                     || type.toString().equals("TX_NEW") || type.toString().equals("PMTCT_HEI_POS")
@@ -291,10 +291,10 @@ public class FrmMain extends javax.swing.JFrame {
                 lstData = processor.processPreprocessed(ind);
 
                 fillList(lstData, ind);
-            }*/
+            }
             if(PERIODICITY.equals("SEMI_ANNUAL") || PERIODICITY.equals("ANNUAL")){
                 
-                if (type.toString().equals("PP_PREV") /*|| type.toString().equals("TB_PREV")*/
+                if (type.toString().equals("PP_PREV") || type.toString().equals("TB_PREV")
                         || type.toString().equals("TX_TB") || type.toString().equals("TX_ML")) {
 
                     processor = new Processor(type);
@@ -605,18 +605,40 @@ public class FrmMain extends javax.swing.JFrame {
                     
                 }else{
                     if(dataelement.contains("TB_Nouveaux cas sous ARV - PVVIH TB positifs so")){
+                        
                         categorieCombo=ds.getTranche()+", "+ds.getGenre()+", "+"Life-long ART, New, Positive";
+                        
                     }else if(dataelement.contains("TB_Anciens cas sous ARV - PVVIH TB positifs so")){
+                        
                          categorieCombo=ds.getTranche()+", "+ds.getGenre()+", "+"Life-long ART, Already, Positive";
+                         
                     }else if(dataelement.equals("TB_Nouveaux cas sous ARV avec un screening TB positif")){
-                         categorieCombo=ds.getTranche()+", "+ds.getGenre()+", "+"Life-long ART, New, Positive";
+                        
+                         categorieCombo=ds.getTranche()+", "+ds.getGenre()+", TB Screen - Positive, Life-long ART, New, Positive";
+                         
                     }else if(dataelement.equals("TB_Anciens cas sous ARV avec un screening TB positif")){
-                         categorieCombo=ds.getTranche()+", "+ds.getGenre()+", "+"Life-long ART, Already, Positive";
+                        
+                         categorieCombo=ds.getTranche()+", "+ds.getGenre()+", TB Screen - Positive, Life-long ART, Already, Positive";
+                         
                     }else if(dataelement.contains("TB_Nouveaux cas sous ARV avec un screening TB N")){
-                         categorieCombo=ds.getTranche()+", "+ds.getGenre()+", "+"Life-long ART, New, Positive";
+                        
+                         categorieCombo=ds.getTranche()+", "+ds.getGenre()+", TB Screen - Negative, Life-long ART, New, Positive";
+                         
                     }else if(dataelement.contains("TB_Anciens cas sous ARV avec un screening TB N")){
-                         categorieCombo=ds.getTranche()+", "+ds.getGenre()+", "+"Life-long ART, New, Positive";
+                        
+                         categorieCombo=ds.getTranche()+", "+ds.getGenre()+", TB Screen - Negative, Life-long ART, Already, Positive";
                     }
+                }
+            }else if(ind.getNom().equals("TB_PREV")){
+                
+                if(dataelement.contains("INH_Nouveaux cas")){
+                    
+                   categorieCombo=ds.getTranche()+", "+ds.getGenre()+", IPT, Life-long ART, New, Positive";
+                            
+                }else if(dataelement.contains("INH_Anciens cas")){
+                    
+                    categorieCombo=ds.getTranche()+", "+ds.getGenre()+", IPT, Life-long ART, Already, Positive";
+                    
                 }
             }
             //Deal with HTS and HTS_TST sub-group
