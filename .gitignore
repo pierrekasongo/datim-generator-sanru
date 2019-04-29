@@ -1,1 +1,6 @@
 jxl.jar
+build/*
+dist/*
+Q4/*
+bkp/*
+data_for_datim.csv

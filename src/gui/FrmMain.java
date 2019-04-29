@@ -589,12 +589,19 @@ public class FrmMain extends javax.swing.JFrame {
             }else if(ind.getNom().equals("TX_ML")){
                 
                if(dataelement.toLowerCase().contains("ml_d")){
+                   
                    categorieCombo="No Clinical Contact - Patient Died, "+ds.getGenre()+", "+ds.getTranche();
+                   
                }else if(dataelement.toLowerCase().contains("ml_t")){
+                   
                    categorieCombo="No Clinical Contact - Undocumented Patient Transfer, "+ds.getGenre()+", "+ds.getTranche();
+                   
                }else if(dataelement.toLowerCase().contains("non retrouv")){
+                   
                    categorieCombo="No Clinical Contact - Unable to Locate Patient, "+ds.getGenre()+", "+ds.getTranche();
-               }else if(dataelement.toLowerCase().contains("non recherh")){
+                   
+               }else if(dataelement.toLowerCase().contains("non recher")){
+                   
                    categorieCombo="No Clinical Contact - No Attempt to Locate Patient, "+ds.getGenre()+", "+ds.getTranche();
                }
             }else if(ind.getNom().equals("TX_TB")){

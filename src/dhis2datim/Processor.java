@@ -651,6 +651,7 @@ public class Processor {
                             
                             if(sheet.getCell(j,3).getContents().length() > 0)
                                     tranche_age=sheet.getCell(j,3).getContents();
+                            else tranche_age = "";
                             
                             if(tranche_age.length() > 0){
                                 
