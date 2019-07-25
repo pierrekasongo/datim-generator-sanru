@@ -29,6 +29,8 @@ public class MyWorker extends SwingWorker<Integer, String>{
         this.list=_list;
     }
     
+    PropertyReader propReader;
+            
     @Override
     protected Integer doInBackground() throws Exception {
         
@@ -39,14 +41,17 @@ public class MyWorker extends SwingWorker<Integer, String>{
         int size=0;
         
         FileWriter writer = null;
+        
         try {
+            
             String filename=Constant.CSV_FILE_NAME;
             
-            //writer = new FileWriter(Constant.CSV_FILE_NAME);
-            writer = new FileWriter(filename);
+            propReader=new PropertyReader();
+            
+            writer = new FileWriter(propReader.getDestinationFolder()+"/"+filename);
             
         } catch (IOException ex) {
-            Logger.getLogger(Dhis2datim.class.getName()).log(Level.SEVERE, null, ex);
+           System.out.println(ex.getMessage());
         }
 
         
@@ -54,7 +59,7 @@ public class MyWorker extends SwingWorker<Integer, String>{
         try {
             CSVUtils.writeLine(writer,Arrays.asList("Data element","Period","OrganisationUnit","CategoryCombo","AttributeCombo","Value"));
         } catch (IOException ex) {
-            Logger.getLogger(Dhis2datim.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println(ex.getMessage());
         }
 
         try {
@@ -63,6 +68,8 @@ public class MyWorker extends SwingWorker<Integer, String>{
             size=list.size();
             
             int i=0;
+            
+            publish("Data element,Period,OrganisationUnit,CategoryCombo,AttributeCombo,Value");
             
             for(CSVLine obj:list){
                 
@@ -80,16 +87,18 @@ public class MyWorker extends SwingWorker<Integer, String>{
                     line.add(obj.getAttributeComboUID());
                     line.add(obj.getValue());
                     
-                    CSVUtils.writeLine(writer, line);
-                     publish(obj.getDataElementUID()+","+obj.getPeriod()+","+obj.getFosa()+
+                    publish(obj.getDataElementUID()+","+obj.getPeriod()+","+obj.getFosa()+
                              ","+obj.getCategorieComboUID()+","+obj.getAttributeComboUID()+","+obj.getValue());
+                    
+                    CSVUtils.writeLine(writer, line);
+                    
             }
-            writer.flush();
+            //writer.flush();
                 
-            writer.close();
+            //writer.close();
             
         } catch (IOException ex) {
-                Logger.getLogger(Dhis2datim.class.getName()).log(Level.SEVERE, null, ex);
+               System.out.println(ex.getMessage());
         }
         
         return count;

@@ -10,169 +10,124 @@ package dhis2datim;
  * @author ebongo
  */
 public class DataStructureDATIM {
-    private String fosa="";
-    private String porte="";
-    private String tranche="";
-    private String genre="";
-    private String valeur="";
-    private int numerateur=0;
-    private String statut="";
-    private String categorie="";
+    private String ou="";
+    private String ouUID="";
+    private String de="";
+    private String deUID="";
+    private String cc="";
+    private String ccUID="";
+    private String value="";
     
-    public DataStructureDATIM(String _fosa,String  _porte,String _tranche,
-            String _genre,String _valeur,int _numerateur,String _statut){
-        this.fosa=_fosa;
-        this.porte=_porte;
-        this.tranche=_tranche;
-        this.genre=_genre;
-        this.valeur=_valeur;
-        this.numerateur=_numerateur;
-        this.statut=_statut;
+    
+    public DataStructureDATIM(String _ou, String _ouUID, String _de, String _deUID,
+            String _cc, String _ccUID, String _value){
+        this.ou=_ou;
+        this.ouUID=_ouUID;
+        this.de=_de;
+        this.deUID=_deUID;
+        this.cc=_cc;
+        this.ccUID=_ccUID;
+        this.value=_value;
+    }
+
+    /**
+     * @return the ou
+     */
+    public String getOu() {
+        return ou;
+    }
+
+    /**
+     * @param ou the ou to set
+     */
+    public void setOu(String ou) {
+        this.ou = ou;
+    }
+
+    /**
+     * @return the ouUID
+     */
+    public String getOuUID() {
+        return ouUID;
+    }
+
+    /**
+     * @param ouUID the ouUID to set
+     */
+    public void setOuUID(String ouUID) {
+        this.ouUID = ouUID;
+    }
+
+    /**
+     * @return the de
+     */
+    public String getDe() {
+        return de;
+    }
+
+    /**
+     * @param de the de to set
+     */
+    public void setDe(String de) {
+        this.de = de;
+    }
+
+    /**
+     * @return the deUID
+     */
+    public String getDeUID() {
+        return deUID;
+    }
+
+    /**
+     * @param deUID the deUID to set
+     */
+    public void setDeUID(String deUID) {
+        this.deUID = deUID;
+    }
+
+    /**
+     * @return the cc
+     */
+    public String getCc() {
+        return cc;
+    }
+
+    /**
+     * @param cc the cc to set
+     */
+    public void setCc(String cc) {
+        this.cc = cc;
+    }
+
+    /**
+     * @return the ccUID
+     */
+    public String getCcUID() {
+        return ccUID;
+    }
+
+    /**
+     * @param ccUID the ccUID to set
+     */
+    public void setCcUID(String ccUID) {
+        this.ccUID = ccUID;
+    }
+
+    /**
+     * @return the value
+     */
+    public String getValue() {
+        return value;
+    }
+
+    /**
+     * @param value the value to set
+     */
+    public void setValue(String value) {
+        this.value = value;
     }
     
-    public DataStructureDATIM(String _fosa,String  _porte,String _categorie,
-            String _valeur,int _numerateur){
-        this.fosa=_fosa;
-        this.porte=_porte;
-        this.categorie=_categorie;
-        this.valeur=_valeur;
-        this.numerateur=_numerateur;
-    }
-
-    /**
-     * @return the fosa
-     */
-    public String getFosa() {
-        return fosa;
-    }
-
-    /**
-     * @return the porte
-     */
-    public String getPorte() {
-        return porte;
-    }
-
-    /**
-     * @param porte the porte to set
-     */
-    public void setPorte(String porte) {
-        this.porte = porte;
-    }
-
-    /**
-     * @param process
-     * @return the tranche
-     */
-    public String getTranche() {
-        
-        String age="";
-        
-        if(tranche.contains(",") || tranche.contains("_"))
-            return tranche;
-        if(tranche.toLowerCase().contains("non documented"))
-            return "Undocumented Test Indication";
-        
-        if(tranche.trim().toLowerCase().startsWith("num") ||
-                tranche.trim().toLowerCase().startsWith("den"))
-            return "default";
-        
-        else if(tranche.trim().contains(" ") && tranche.trim().contains("an")){
-            
-            String []splited = tranche.split(" ");
-        
-            age=splited[0].trim();
-            
-            if(age.startsWith("+"))
-                age=age.replace('+', ' ').trim()+"+";
-            if(age.startsWith(">"))
-                age=age.replace('>', ' ').trim()+"+";
-            return age;
-        }
-        return tranche;      
-    }
-
-    /**
-     * @param tranche the tranche to set
-     */
-    public void setTranche(String tranche) {
-        this.tranche = tranche;
-    }
-
-    /**
-     * @return the genre
-     */
-    public String getGenre() {
-       
-        if(genre.startsWith("F")){
-            return "Female";
-        }else if(genre.startsWith("M")){
-            return "Male";
-        }else return "Unknown Sex";
-        
-    }
-
-    /**
-     * @param genre the genre to set
-     */
-    public void setGenre(String genre) {
-        this.genre = genre;
-    }
-
-    /**
-     * @return the valeur
-     */
-    public String getValeur() {
-        return valeur;
-    }
-
-    /**
-     * @param valeur the valeur to set
-     */
-    public void setValeur(String valeur) {
-        this.valeur = valeur;
-    }
-
-    /**
-     * @return the numerateur
-     */
-    public int getNumerateur() {
-        return numerateur;
-    }
-
-    /**
-     * @param numerateur the numerateur to set
-     */
-    public void setNumerateur(int numerateur) {
-        this.numerateur = numerateur;
-    }
-
-    /**
-     * @return the statut
-     */
-    public String getStatut() {
-        return statut;
-    }
-
-    /**
-     * @param statut the statut to set
-     */
-    public void setStatut(String statut) {
-        this.statut = statut;
-    }
-
-    /**
-     * @return the categorie
-     */
-    public String getCategorie() {
-        return categorie;
-    }
-
-    /**
-     * @param categorie the categorie to set
-     */
-    public void setCategorie(String categorie) {
-        this.categorie = categorie;
-    }
+    
     
 }

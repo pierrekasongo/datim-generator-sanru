@@ -6,16 +6,25 @@
 package gui;
 
 import dhis2datim.CSVLine;
-import dhis2datim.CategoryComboType;
 import dhis2datim.DataStructureDATIM;
-import dhis2datim.Indicateur;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import javax.swing.SwingWorker.StateValue;
 import dhis2datim.MyWorker;
 import dhis2datim.Processor;
+import dhis2datim.PropertyReader;
+import java.awt.Dialog;
+import java.awt.Image;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.imageio.ImageIO;
+import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 
 public class FrmMain extends javax.swing.JFrame {
@@ -41,18 +50,19 @@ public class FrmMain extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         progress = new javax.swing.JProgressBar();
         jLabel1 = new javax.swing.JLabel();
-        jPanel2 = new javax.swing.JPanel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        logScreen = new javax.swing.JTextArea();
-        btnprocess = new javax.swing.JButton();
+        jLabel5 = new javax.swing.JLabel();
+        jPanel3 = new javax.swing.JPanel();
+        jLabel7 = new javax.swing.JLabel();
+        txtAttribute = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
         cbxYear = new javax.swing.JComboBox<>();
-        cbxQuarter = new javax.swing.JComboBox<>();
-        jLabel4 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
-        jLabel6 = new javax.swing.JLabel();
-        cbxPeriodicity = new javax.swing.JComboBox<>();
+        lbldatafile = new javax.swing.JLabel();
+        btnprocess = new javax.swing.JButton();
+        jButton2 = new javax.swing.JButton();
+        lbldestination = new javax.swing.JLabel();
+        jLabel8 = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        logScreen = new javax.swing.JTextArea();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
 
@@ -62,6 +72,7 @@ public class FrmMain extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("DATIM Generator 1.1");
+        setBackground(new java.awt.Color(58, 190, 228));
         setResizable(false);
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowActivated(java.awt.event.WindowEvent evt) {
@@ -80,13 +91,13 @@ public class FrmMain extends javax.swing.JFrame {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(progress, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(progress, javax.swing.GroupLayout.DEFAULT_SIZE, 653, Short.MAX_VALUE)
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap(13, Short.MAX_VALUE)
                 .addComponent(progress, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(9, 9, 9))
         );
@@ -95,32 +106,23 @@ public class FrmMain extends javax.swing.JFrame {
         jLabel1.setForeground(new java.awt.Color(13, 89, 205));
         jLabel1.setText("DATIM Generator 1.0");
 
-        jPanel2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(192, 178, 178)));
+        jLabel5.setToolTipText("");
 
-        logScreen.setEditable(false);
-        logScreen.setBackground(new java.awt.Color(13, 9, 5));
-        logScreen.setColumns(20);
-        logScreen.setFont(new java.awt.Font("Ubuntu", 0, 12)); // NOI18N
-        logScreen.setForeground(new java.awt.Color(85, 210, 60));
-        logScreen.setRows(5);
-        logScreen.setText("Click \"start processing\" to run the processing");
-        logScreen.setFocusable(false);
-        jScrollPane1.setViewportView(logScreen);
+        jPanel3.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(192, 178, 178)));
 
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 576, javax.swing.GroupLayout.PREFERRED_SIZE))
-        );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 310, javax.swing.GroupLayout.PREFERRED_SIZE))
-        );
+        jLabel7.setFont(new java.awt.Font("Ubuntu", 1, 15)); // NOI18N
+        jLabel7.setText("Attribute:");
+
+        txtAttribute.setEditable(false);
+        txtAttribute.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+
+        jLabel2.setFont(new java.awt.Font("Ubuntu", 1, 15)); // NOI18N
+        jLabel2.setText("Period:");
+
+        cbxYear.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+
+        lbldatafile.setText("File path");
+        lbldatafile.setToolTipText("");
 
         btnprocess.setFont(new java.awt.Font("Ubuntu", 1, 18)); // NOI18N
         btnprocess.setForeground(new java.awt.Color(245, 2, 2));
@@ -136,22 +138,84 @@ public class FrmMain extends javax.swing.JFrame {
             }
         });
 
-        jLabel2.setFont(new java.awt.Font("Ubuntu", 1, 15)); // NOI18N
-        jLabel2.setText("Year");
+        jButton2.setText("Choose data file...");
+        jButton2.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButton2MouseClicked(evt);
+            }
+        });
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
 
-        jLabel4.setFont(new java.awt.Font("Ubuntu", 1, 15)); // NOI18N
-        jLabel4.setText("Quarter");
+        lbldestination.setText("data file");
+        lbldestination.setToolTipText("");
 
-        jLabel3.setFont(new java.awt.Font("Abyssinica SIL", 0, 12)); // NOI18N
-        jLabel3.setForeground(new java.awt.Color(13, 89, 205));
-        jLabel3.setText("©IHAP HK/L");
+        jLabel8.setFont(new java.awt.Font("Ubuntu", 1, 15)); // NOI18N
+        jLabel8.setText("Destination folder:");
 
-        jLabel5.setToolTipText("");
+        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
+        jPanel3.setLayout(jPanel3Layout);
+        jPanel3Layout.setHorizontalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 197, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(lbldatafile))
+                        .addGap(18, 18, 18)
+                        .addComponent(jLabel8)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(lbldestination))
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel2)
+                            .addComponent(jLabel7))
+                        .addGap(35, 35, 35)
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(txtAttribute)
+                            .addComponent(cbxYear, 0, 238, Short.MAX_VALUE))
+                        .addGap(18, 18, 18)
+                        .addComponent(btnprocess, javax.swing.GroupLayout.PREFERRED_SIZE, 179, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(89, Short.MAX_VALUE))
+        );
+        jPanel3Layout.setVerticalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addComponent(jLabel7)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jLabel2))
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addComponent(txtAttribute, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(cbxYear, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(btnprocess, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton2)
+                    .addComponent(jLabel8)
+                    .addComponent(lbldestination, javax.swing.GroupLayout.PREFERRED_SIZE, 17, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(lbldatafile)
+                .addContainerGap(18, Short.MAX_VALUE))
+        );
 
-        jLabel6.setFont(new java.awt.Font("Ubuntu", 1, 15)); // NOI18N
-        jLabel6.setText("Periodicity");
-
-        cbxPeriodicity.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "QUARTER", "SEMI_ANNUAL", "ANNUAL" }));
+        logScreen.setEditable(false);
+        logScreen.setBackground(new java.awt.Color(13, 9, 5));
+        logScreen.setColumns(20);
+        logScreen.setFont(new java.awt.Font("Ubuntu", 0, 12)); // NOI18N
+        logScreen.setForeground(new java.awt.Color(85, 210, 60));
+        logScreen.setRows(5);
+        logScreen.setText("Click \"start processing\" to run the processing");
+        logScreen.setFocusable(false);
+        jScrollPane1.setViewportView(logScreen);
 
         jMenu1.setText("File");
         jMenuBar1.add(jMenu1);
@@ -162,67 +226,36 @@ public class FrmMain extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
+                .addComponent(jLabel5)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(jLabel2)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(cbxYear, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(jLabel4)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(cbxQuarter, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addComponent(jLabel1))
-                                .addGap(0, 0, Short.MAX_VALUE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(0, 0, Short.MAX_VALUE)
-                                .addComponent(jLabel6)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(cbxPeriodicity, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(btnprocess, javax.swing.GroupLayout.DEFAULT_SIZE, 194, Short.MAX_VALUE)
-                            .addComponent(jLabel3))
-                        .addGap(9, 9, 9))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel5)
-                        .addGap(0, 0, Short.MAX_VALUE)))
-                .addContainerGap())
+                    .addComponent(jLabel1)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 655, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(4, 4, 4)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
-                    .addComponent(jLabel3))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel5)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 14, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(cbxPeriodicity, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel6))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(8, 8, 8)
+                .addComponent(jLabel1)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btnprocess)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(cbxQuarter, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel4))
-                        .addComponent(jLabel2)
-                        .addComponent(cbxYear, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(119, 119, 119)
+                        .addComponent(jLabel5)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(9, 9, 9)
+                        .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 310, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)))
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         pack();
@@ -242,76 +275,94 @@ public class FrmMain extends javax.swing.JFrame {
 
     private List<DataStructureDATIM> lstData;
 
-    private final static String ATTRIBUTE_COMBO = "JVafaPfopJf";
+    private  static String ATTRIBUTE_COMBO = "";
+    
+    PropertyReader propReader;
+    
+
+    private void formWindowActivated(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowActivated
+        try {
+            // TODO add your handling code here:
+
+            propReader=new PropertyReader();
+            
+            ATTRIBUTE_COMBO = propReader.getAttributeCombo();
+            
+            txtAttribute.setText(ATTRIBUTE_COMBO);
+            
+            lbldestination.setText(propReader.getDestinationFolder());
+            
+        } catch (IOException ex) {
+            Logger.getLogger(FrmMain.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        cbxYear.addItem("");
+        
+        cbxYear.addItem("");
+        
+        for (int i = 2018; i < 2025; i++) {
+            
+            for(int j = 1; j< 5; j++){
+                
+                cbxYear.addItem(i + "Q"+j);
+            }
+            
+        }
+    }//GEN-LAST:event_formWindowActivated
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jButton2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton2MouseClicked
+        // TODO add your handling code here:
+        JFileChooser chooser = new JFileChooser();
+        int res = chooser.showOpenDialog(this);
+
+        if(res == JFileChooser.APPROVE_OPTION){
+            String filename = chooser.getSelectedFile().getName();
+            String path= chooser.getSelectedFile().getAbsolutePath();
+            lbldatafile.setText(path);
+        }else{
+
+        }
+    }//GEN-LAST:event_jButton2MouseClicked
+
+    private void btnprocessActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnprocessActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnprocessActionPerformed
 
     private void btnprocessMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnprocessMouseClicked
         // TODO add your handling code here:
 
-        if (cbxYear.getSelectedItem().toString().equals("")
-                || cbxQuarter.getSelectedItem().toString().equals("")) {
+        if(txtAttribute.getText().equals("")){
+            JOptionPane.showMessageDialog(null, "No attribute combo set.");
+            return;
+        }
+        if (cbxYear.getSelectedItem().toString().equals("")) {
             JOptionPane.showMessageDialog(null, "You should select a period");
             return;
         }
-        PERIOD = cbxYear.getSelectedItem().toString() + "Q" + cbxQuarter.getSelectedItem().toString();
-        
-        PERIODICITY=cbxPeriodicity.getSelectedItem().toString();
+        if(lbldatafile.getText().length() == 0){
+            JOptionPane.showMessageDialog(null, "No data file selected. You have to select a .xls file.");
+            return;
+        }
 
-        System.out.println("STARTING DATIM GENERATOR ........");
-        System.out.println();
-        System.out.println();
+        PERIOD = cbxYear.getSelectedItem().toString();
 
         logScreen.setText("DATIM generator running...");
 
-        List<DataStructureDATIM> lstData = new ArrayList<>();
+        List<DataStructureDATIM> lstData;
 
         list = new ArrayList<>();
 
-        System.out.println("Data element,Period,OrganisationUnit,CategorieCombo,CategorieComboUID, AttributeCombo,Value");
+        processor = new Processor(lbldatafile.getText());
 
-        //*************************
-        //REMEMBER YOU DIDN'T TAKE INTO ACCOUNT THE TOTAL COLUMNS FOR HTS_TST (MUST BE DELETED OR CHANGE CODE
-        //*************************
-        for (CategoryComboType type : CategoryComboType.values()) {
-            
-            if (type.toString().equals("HTS_TST") || type.toString().equals("HTS_TST_2")
-                    || type.toString().equals("PMTCT_STAT")
-                    || type.toString().equals("TB_STAT") || type.toString().equals("HTS_INDEX")
-                    || type.toString().equals("TX_NEW") || type.toString().equals("PMTCT_HEI_POS")
-                    || type.toString().equals("PMTCT_EID") || type.toString().equals("TX_CURR")
-                    || type.toString().equals("PMTCT_ART") || type.toString().equals("TB_ART")
-                    || type.toString().equals("TX_PVLS") || type.toString().equals("HTS_INDEX_COMM")
-                    || type.toString().equals("HTS_TST_COMM")) {
+        lstData = new ArrayList<>();
 
-                processor = new Processor(type);
+        lstData = processor.processData();
 
-                Indicateur ind = new Indicateur(type.toString());
-
-                lstData = new ArrayList<>();
-
-                lstData = processor.processPreprocessed(ind);
-
-                fillList(lstData, ind);
-            }
-            if(PERIODICITY.equals("SEMI_ANNUAL") || PERIODICITY.equals("ANNUAL")){
-                
-                if (type.toString().equals("PP_PREV") || type.toString().equals("TB_PREV")
-                        || type.toString().equals("TX_TB") || type.toString().equals("TX_ML")) {
-
-                    processor = new Processor(type);
-
-                    Indicateur ind = new Indicateur(type.toString());
-
-                    lstData = processor.processPreprocessed(ind);
-                    
-                    
-
-                    fillList(lstData, ind);
-                }
-            }
-            if(PERIODICITY.equals("ANNUAL")){
-                
-            }
-        }
+        fillList(lstData);
 
         logScreen.setText("Data processing started\n");
 
@@ -324,45 +375,27 @@ public class FrmMain extends javax.swing.JFrame {
                 switch (evt.getPropertyName()) {
 
                     case "progress":
-                        progress.setIndeterminate(false);
-                        progress.setValue((Integer) evt.getNewValue());
-                        btnprocess.setEnabled(false);
-                        break;
+                    progress.setIndeterminate(false);
+                    progress.setValue((Integer) evt.getNewValue());
+                    btnprocess.setEnabled(false);
+                    break;
                     case "state":
-                        switch ((StateValue) evt.getNewValue()) {
-                            case DONE:
-                                progress.setValue(0);
-                                try {
-                                    final int count = worker.get();
-                                    logScreen.append("\nDATIM file generated successfully with " + count + " lines");
-                                    btnprocess.setEnabled(true);
-                                } catch (final Exception e) {
+                    switch ((StateValue) evt.getNewValue()) {
+                        case DONE:
+                        progress.setValue(0);
+                        try {
+                            final int count = worker.get();
+                            logScreen.append("\nDATIM file generated successfully with " + count + " lines");
+                            btnprocess.setEnabled(true);
+                        } catch (final Exception e) {
 
-                                }
                         }
+                    }
                 }
             }
         });
         worker.execute();
-
     }//GEN-LAST:event_btnprocessMouseClicked
-
-    private void formWindowActivated(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowActivated
-        // TODO add your handling code here:
-        cbxYear.addItem("");
-        cbxQuarter.addItem("");
-        for (int i = 2018; i < 2025; i++) {
-            //years[i]=i+"";
-            cbxYear.addItem(i + "");
-        }
-        for (int i = 1; i <= 4; i++) {
-            cbxQuarter.addItem(i + "");
-        }
-    }//GEN-LAST:event_formWindowActivated
-
-    private void btnprocessActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnprocessActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnprocessActionPerformed
 
     /**
      * @param args the command line arguments
@@ -401,294 +434,50 @@ public class FrmMain extends javax.swing.JFrame {
         });
     }
 
-    private static void fillList(List<DataStructureDATIM> lstData, Indicateur ind) {
+    private static void fillList(List<DataStructureDATIM> lstData) {
+        
+        int count=0;
 
         for (DataStructureDATIM ds : lstData) {
-
-            String fosaUID = processor.getOrgUnitByKey(ds.getFosa().trim());
-
-            if (fosaUID.equals("")) {
-                System.err.println("FOSA " + ds.getFosa());
-                continue;
-            }
+            
             count++;
 
-            String dataelement = ds.getPorte();
+            
+            String de_datim = processor.getDataElementByKey(ds.getDeUID());
+            
+            String ou_datim = processor.getOrgUnitByKey(ds.getOuUID());
+            
+            String cc_datim = processor.getCategorieComboByKey(ds.getCcUID());
+            
+            String value = ds.getValue();
 
-            String dataelementUID = processor.getDataElementByKey(dataelement, ind);
+            System.out.println(count + " " + ds.getDe()+ "," +PERIOD+","+ ds.getOu() + "," + ds.getCc()+ "," +ATTRIBUTE_COMBO+","+ value );
 
-            String categorieComboUID, categorieCombo = "";
-
-            if (ind.getNom().equals("HTS_TST") || ind.getNom().equals("HTS_TST_2")) {
-
-                categorieCombo = Processor.makeCategorieName(ds.getTranche(), ds.getGenre(), ds.getStatut());
-
-            } else if (ind.getNom().equals("PMTCT_STAT")) {
-
-                if (dataelement.contains("connues")) {
-
-                    categorieCombo = Processor.makeCategorieName(ds.getTranche(), ds.getGenre(), "Known at Entry Positive");
-
-                } else if (dataelement.contains("conseil")) {
-
-                    categorieCombo = Processor.makeCategorieName(ds.getTranche(), ds.getGenre(), "Newly Identified " + ds.getStatut());
-
-                } else {
-                    categorieCombo = ds.getTranche() + ", " + ds.getGenre();
-                }
-
-            } else if (ind.getNom().equals("TB_STAT") || ind.getNom().equals("HTS_INDEX")) {
-
-                if (dataelement.contains("HTS_cNombre")) {
-
-                    categorieCombo = ds.getTranche() + ", Known at Entry Positive, " + ds.getGenre();
-
-                } else if (dataelement.contains("HTS_nNombre")) {
-
-                    categorieCombo = ds.getTranche() + ", Newly Identified " + ds.getStatut() + ", " + ds.getGenre();
-                } else {
-                    categorieCombo = ds.getTranche() + ", " + ds.getGenre();
-                }
-
-            } else if (ind.getNom().equals("TX_NEW")) {
-
-                if (dataelement.contains("allaitante")) {
-
-                    categorieCombo = "Breastfeeding, Positive";
-
-                } else if (dataelement.contains("UDI")) {
-
-                    categorieCombo = "PWID, Positive";
-
-                } else if (dataelement.contains("MSM")) {
-
-                    categorieCombo = "MSM, Positive";
-
-                } else if (dataelement.contains("TRANSGE")) {
-
-                    categorieCombo = "TG, Positive";
-
-                } else if (dataelement.contains("PS")) {
-
-                    categorieCombo = "FSW, Positive";
-
-                } else if (dataelement.contains("PRISONNIER")) {
-
-                    categorieCombo = "People in prisons and other enclosed settings, Positive";
-                } else {
-                    categorieCombo = ds.getTranche() + ", " + ds.getGenre() + ", Positive";
-                }
-            } else if (ind.getNom().equals("TX_CURR")) {
-
-                categorieCombo = Processor.makeCategorieName(ds.getTranche(), ds.getGenre(), "Positive");
-
-            } else if (ind.getNom().equals("PMTCT_ART")) {
-
-                String cc = "";
-
-                if (dataelement.contains("CPN1")) {
-                    cc = "Life-long ART, Already";
-                } else if (dataelement.contains("New")) {
-                    cc = "Life-long ART, New";
-                }
-
-                categorieCombo = ds.getTranche() + ", " + cc + ", " + ds.getGenre() + ", " + ds.getStatut();
-
-            } else if (ind.getNom().equals("TB_ART")) {
-
-                String cc = "";
-
-                if (dataelement.contains("Connu")) {
-                    cc = "Life-long ART, Already";
-                } else if (dataelement.contains("New")) {
-                    cc = "Life-long ART, New";
-                }
-
-                categorieCombo = ds.getTranche() + ", " + ds.getGenre() + ", " + cc + ", " + ds.getStatut();
-
-            }
-            else if (ind.getNom().equals("PMTCT_HEI_POS")) {
-
-                if (dataelement.contains("Positif EE 0-2")) {
-
-                    categorieCombo = "<= 2 months, Positive";
-
-                } else if (dataelement.contains("Positif EE 2-12")) {
-
-                    categorieCombo = "2 - 12 months , Positive";
-
-                } else if (dataelement.contains("TTT EE 0-2")) {
-
-                    categorieCombo = "<= 2 months, Positive, Receiving ART";
-
-                } else if (dataelement.contains("TTT EE 2-12")) {
-
-                    categorieCombo = "2 - 12 months , Positive, Receiving ART";
-                }
-            } else if (ind.getNom().equals("PMTCT_EID")) {
-
-                if (dataelement.contains("EE")) {
-
-                    categorieCombo = "<= 2 months";
-
-                } else {
-                    categorieCombo = "2 - 12 months";
-                }
-            } else if (ind.getNom().equals("HTS_INDEX_COMM")) {
-
-                if (ds.getStatut().equals("-")) {
-                    categorieCombo = ds.getTranche() + ", " + ds.getGenre();
-                } else {
-                    categorieCombo = ds.getTranche() + ", Newly Identified " + ds.getStatut() + ", " + ds.getGenre();
-                }
-
-            } else if (ind.getNom().equals("HTS_TST_COMM")) {
-
-                categorieCombo = ds.getTranche() + ", " + ds.getGenre() + ", " + ds.getStatut();
-            } else if (ind.getNom().equals("TX_PVLS")) {
-
-                if (ds.getGenre().equals("Unknown Sex")) {
-                    categorieCombo = ds.getStatut() + ", " + ds.getTranche() + ", Positive";
-                } else {
-                    categorieCombo = ds.getTranche() + ", " + ds.getGenre() + ", " + ds.getStatut() + ", Positive";
-                }
-            }else if(ind.getNom().equals("PP_PREV")){
-                
-                //System.out.println(ds.getFosa());
-                if(ds.getGenre().contains("Unknown")){
-                    
-                    if(ds.getTranche().length() == 0){
-                        
-                        categorieCombo="Newly Tested or Testing Referred";
-                    }else{
-                        
-                        if(ds.getTranche().toLowerCase().contains("military")){
-                            categorieCombo="Military & Other Uniformed Services";
-                        }else if(ds.getTranche().toLowerCase().contains("mobile")){
-
-                            categorieCombo="Mobile Population";
-                        }else if(ds.getTranche().toLowerCase().contains("client")){
-
-                            categorieCombo="Clients of Sex Workers";
-                        }else if(ds.getTranche().toLowerCase().contains("deplaced")){
-
-                            categorieCombo="Displaced Persons";
-                        }else if(ds.getTranche().toLowerCase().contains("pecheur")){
-                            categorieCombo="Fishing Communities";
-                        }else if(ds.getTranche().toLowerCase().contains("udi")){
-                            categorieCombo="Non-injecting Drug Users";
-                        }else if(ds.getTranche().toLowerCase().contains("others")){
-                            categorieCombo="Other Priority Population Types";
-                        } 
-                    }
-                    
-                }else{
-                    
-                    categorieCombo=ds.getTranche()+", "+ds.getGenre();
-                }
-            }else if(ind.getNom().equals("TX_ML")){
-                
-               if(dataelement.toLowerCase().contains("ml_d")){
-                   
-                   categorieCombo="No Clinical Contact - Patient Died, "+ds.getGenre()+", "+ds.getTranche();
-                   
-               }else if(dataelement.toLowerCase().contains("ml_t")){
-                   
-                   categorieCombo="No Clinical Contact - Undocumented Patient Transfer, "+ds.getGenre()+", "+ds.getTranche();
-                   
-               }else if(dataelement.toLowerCase().contains("non retrouv")){
-                   
-                   categorieCombo="No Clinical Contact - Unable to Locate Patient, "+ds.getGenre()+", "+ds.getTranche();
-                   
-               }else if(dataelement.toLowerCase().contains("non recher")){
-                   
-                   categorieCombo="No Clinical Contact - No Attempt to Locate Patient, "+ds.getGenre()+", "+ds.getTranche();
-               }
-            }else if(ind.getNom().equals("TX_TB")){
-                
-                if(ds.getGenre().equals("Unknown Sex")){
-                    
-                    categorieCombo=ds.getTranche();
-                    
-                }else{
-                    if(dataelement.contains("TB_Nouveaux cas sous ARV - PVVIH TB positifs so")){
-                        
-                        categorieCombo=ds.getTranche()+", "+ds.getGenre()+", "+"Life-long ART, New, Positive";
-                        
-                    }else if(dataelement.contains("TB_Anciens cas sous ARV - PVVIH TB positifs so")){
-                        
-                         categorieCombo=ds.getTranche()+", "+ds.getGenre()+", "+"Life-long ART, Already, Positive";
-                         
-                    }else if(dataelement.equals("TB_Nouveaux cas sous ARV avec un screening TB positif")){
-                        
-                         categorieCombo=ds.getTranche()+", "+ds.getGenre()+", TB Screen - Positive, Life-long ART, New, Positive";
-                         
-                    }else if(dataelement.equals("TB_Anciens cas sous ARV avec un screening TB positif")){
-                        
-                         categorieCombo=ds.getTranche()+", "+ds.getGenre()+", TB Screen - Positive, Life-long ART, Already, Positive";
-                         
-                    }else if(dataelement.contains("TB_Nouveaux cas sous ARV avec un screening TB N")){
-                        
-                         categorieCombo=ds.getTranche()+", "+ds.getGenre()+", TB Screen - Negative, Life-long ART, New, Positive";
-                         
-                    }else if(dataelement.contains("TB_Anciens cas sous ARV avec un screening TB N")){
-                        
-                         categorieCombo=ds.getTranche()+", "+ds.getGenre()+", TB Screen - Negative, Life-long ART, Already, Positive";
-                    }
-                }
-            }else if(ind.getNom().equals("TB_PREV")){
-                
-                if(dataelement.contains("INH_Nouveaux cas")){
-                    
-                   categorieCombo=ds.getTranche()+", "+ds.getGenre()+", IPT, Life-long ART, New, Positive";
-                            
-                }else if(dataelement.contains("INH_Anciens cas")){
-                    
-                    categorieCombo=ds.getTranche()+", "+ds.getGenre()+", IPT, Life-long ART, Already, Positive";
-                    
-                }
-            }
-            //Deal with HTS and HTS_TST sub-group
-            if (ind.getNom().equals("HTS_TST") || ind.getNom().equals("HTS_TST_2")) {
-
-                if (dataelement.contains("Pediatric") || dataelement.contains("malnouri")) {//GROUPE1
-                    categorieCombo += "_GROUPE1";
-                } else if (dataelement.contains("Post ANC1")) {//GROUPE 2
-                    categorieCombo += "_GROUPE2";
-                } else {//GROUPE3
-                    categorieCombo += "_GROUPE3";
-                }
-
-            }
-            categorieComboUID = processor.getCategorieComboByKey(categorieCombo);
-
-            System.out.println(count + " " + dataelement + "," + dataelementUID + "," + PERIOD + "," + ds.getFosa() + "," + fosaUID + ","
-                    + categorieCombo + "," + categorieComboUID + "," + ATTRIBUTE_COMBO + "," + ds.getValeur());
-
-            list.add(new CSVLine(dataelementUID, PERIOD, fosaUID, categorieComboUID, ATTRIBUTE_COMBO, ds.getValeur() + ""));
+            list.add(new CSVLine(de_datim, PERIOD, ou_datim, cc_datim, ATTRIBUTE_COMBO, value));
         }
         System.out.println(count + " Lines added successfully!");
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnprocess;
-    private javax.swing.JComboBox<String> cbxPeriodicity;
-    private javax.swing.JComboBox<String> cbxQuarter;
     private javax.swing.JComboBox<String> cbxYear;
+    private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextField2;
+    public javax.swing.JLabel lbldatafile;
+    public javax.swing.JLabel lbldestination;
     private javax.swing.JTextArea logScreen;
     private javax.swing.JProgressBar progress;
+    public javax.swing.JTextField txtAttribute;
     // End of variables declaration//GEN-END:variables
 }
